@@ -1,0 +1,46 @@
+<!-- Scan Progress Modal -->
+<div id="scan-modal" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
+    <div class="bg-gray-800 border border-gray-700 rounded-lg p-8 w-full max-w-md">
+        <h2 class="text-xl font-semibold text-white mb-6">Scanning in Progress</h2>
+        
+        <!-- Progress Bar -->
+        <div class="mb-6">
+            <div class="w-full h-2 bg-gray-700 rounded-full overflow-hidden">
+                <div id="scan-progress-bar" class="h-full bg-blue-500 transition-all duration-300" style="width: 0%"></div>
+            </div>
+            <p id="scan-progress-text" class="text-sm text-gray-400 mt-2">0% - Initializing...</p>
+        </div>
+
+        <!-- Scan Details -->
+        <div id="scan-details" class="bg-gray-700/50 rounded-lg p-4 mb-6 space-y-2">
+            <p class="text-sm text-gray-400">Target: <span id="scan-target" class="text-white font-mono">-</span></p>
+            <p class="text-sm text-gray-400">Type: <span id="scan-type" class="text-white font-mono">-</span></p>
+            <p class="text-sm text-gray-400">Status: <span id="scan-status" class="text-yellow-400 font-mono">Running</span></p>
+        </div>
+
+        <!-- Cancel Button -->
+        <button onclick="closeScanModal()" 
+                class="w-full px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg font-medium transition-colors">
+            Minimize
+        </button>
+    </div>
+</div>
+
+<script>
+function showScanModal(target, type) {
+    document.getElementById('scan-modal').classList.remove('hidden');
+    document.getElementById('scan-target').textContent = target;
+    document.getElementById('scan-type').textContent = type;
+    document.getElementById('scan-progress-bar').style.width = '0%';
+    document.getElementById('scan-progress-text').textContent = '0% - Initializing...';
+}
+
+function closeScanModal() {
+    document.getElementById('scan-modal').classList.add('hidden');
+}
+
+function updateScanProgress(progress, message) {
+    document.getElementById('scan-progress-bar').style.width = progress + '%';
+    document.getElementById('scan-progress-text').textContent = progress + '% - ' + message;
+}
+</script>

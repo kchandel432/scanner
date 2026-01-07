@@ -1,0 +1,65 @@
+app:
+  name: "BlackLotus AI Security Scanner"
+  version: "2.0.0"
+  environment: "production"
+  debug: false
+
+server:
+  host: "0.0.0.0"
+  port: 8000
+  workers: 4
+  reload: false
+
+database:
+  url: "sqlite:///./instance/blacklotus.db"
+  echo: false
+  pool_size: 10
+  max_overflow: 20
+
+security:
+  secret_key: "your-secret-key-here-change-in-production"
+  algorithm: "HS256"
+  access_token_expire_minutes: 30
+  cors_origins:
+    - "http://localhost:3000"
+    - "http://127.0.0.1:3000"
+
+ai_models:
+  malware_detector:
+    path: "ml_models/malware_detector/model.onnx"
+    threshold: 0.7
+  website_classifier:
+    path: "ml_models/website_classifier/model.pth"
+  content_analyzer:
+    model: "distilbert-base-uncased"
+
+scanning:
+  max_file_size_mb: 100
+  allowed_file_types:
+    - ".exe"
+    - ".dll"
+    - ".sys"
+    - ".pdf"
+    - ".doc"
+    - ".docx"
+    - ".xls"
+    - ".xlsx"
+    - ".js"
+    - ".py"
+    - ".php"
+    - ".jar"
+    - ".apk"
+  timeout_seconds: 30
+
+threat_intelligence:
+  google_safe_browsing_api_key: ""
+  virus_total_api_key: ""
+  abuseipdb_api_key: ""
+  update_frequency_hours: 24
+
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "logs/blacklotus.log"
+  max_size_mb: 100
+  backup_count: 5

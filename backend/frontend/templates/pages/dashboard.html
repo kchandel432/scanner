@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+
+{% block page_title %}Dashboard{% endblock %}
+{% block page_subtitle %}AI-Powered Cyber Risk Assessment{% endblock %}
+
+{% block content %}
+<!-- Dashboard Content -->
+<div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+    <!-- Risk Score Card -->
+    <div class="bg-gray-800 border border-gray-700 rounded-lg p-6 hover:border-blue-500 transition-colors">
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="text-sm font-medium text-gray-400">Risk Score</h3>
+            <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+            </svg>
+        </div>
+        <div class="text-3xl font-bold text-white">{{ stats.risk_score }}%</div>
+        <p class="text-xs text-gray-500 mt-2">Overall security posture</p>
+    </div>
+
+    <!-- Total Scans Card -->
+    <div class="bg-gray-800 border border-gray-700 rounded-lg p-6 hover:border-green-500 transition-colors">
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="text-sm font-medium text-gray-400">Total Scans</h3>
+            <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+        </div>
+        <div class="text-3xl font-bold text-white">{{ stats.total_scans }}</div>
+        <p class="text-xs text-gray-500 mt-2">Total security assessments</p>
+    </div>
+
+    <!-- Active Threats Card -->
+    <div class="bg-gray-800 border border-gray-700 rounded-lg p-6 hover:border-red-500 transition-colors">
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="text-sm font-medium text-gray-400">Active Threats</h3>
+            <svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4v2m0 4v2M7.08 6.47a9 9 0 1117.84 0"></path>
+            </svg>
+        </div>
+        <div class="text-3xl font-bold text-white">{{ stats.active_threats }}</div>
+        <p class="text-xs text-gray-500 mt-2">Requires immediate attention</p>
+    </div>
+
+    <!-- Uptime Card -->
+    <div class="bg-gray-800 border border-gray-700 rounded-lg p-6 hover:border-purple-500 transition-colors">
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="text-sm font-medium text-gray-400">Uptime</h3>
+            <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+            </svg>
+        </div>
+        <div class="text-3xl font-bold text-white">{{ stats.uptime }}</div>
+        <p class="text-xs text-gray-500 mt-2">System availability</p>
+    </div>
+</div>
+
+<!-- Recent Scans -->
+<div class="mt-8">
+    <div class="bg-gray-800 border border-gray-700 rounded-lg p-6">
+        <div class="flex items-center justify-between mb-6">
+            <h2 class="text-lg font-semibold text-white">Recent Scans</h2>
+            <a href="/scan" class="text-blue-400 hover:text-blue-300 text-sm">View all →</a>
+        </div>
+
+        <div class="overflow-x-auto">
+            <table class="w-full">
+                <thead>
+                    <tr class="border-b border-gray-700">
+                        <th class="text-left py-3 px-4 text-sm font-medium text-gray-400">Target</th>
+                        <th class="text-left py-3 px-4 text-sm font-medium text-gray-400">Type</th>
+                        <th class="text-left py-3 px-4 text-sm font-medium text-gray-400">Status</th>
+                        <th class="text-left py-3 px-4 text-sm font-medium text-gray-400">Risk Level</th>
+                        <th class="text-left py-3 px-4 text-sm font-medium text-gray-400">Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for scan in recent_scans %}
+                    <tr class="border-b border-gray-700 hover:bg-gray-700/50 transition-colors">
+                        <td class="py-3 px-4 text-sm text-white">{{ scan.target }}</td>
+                        <td class="py-3 px-4 text-sm">
+                            <span class="px-2 py-1 bg-blue-500/20 text-blue-300 rounded text-xs font-medium">
+                                {{ scan.type | upper }}
+                            </span>
+                        </td>
+                        <td class="py-3 px-4 text-sm">
+                            {% if scan.status == 'completed' %}
+                            <span class="text-green-400">✓ Completed</span>
+                            {% elif scan.status == 'scanning' %}
+                            <span class="text-yellow-400">⟳ Scanning</span>
+                            {% else %}
+                            <span class="text-gray-400">○ Pending</span>
+                            {% endif %}
+                        </td>
+                        <td class="py-3 px-4 text-sm">
+                            {% if scan.risk_level == 'critical' %}
+                            <span class="px-2 py-1 bg-red-500/20 text-red-300 rounded text-xs font-medium">Critical</span>
+                            {% elif scan.risk_level == 'high' %}
+                            <span class="px-2 py-1 bg-orange-500/20 text-orange-300 rounded text-xs font-medium">High</span>
+                            {% elif scan.risk_level == 'medium' %}
+                            <span class="px-2 py-1 bg-yellow-500/20 text-yellow-300 rounded text-xs font-medium">Medium</span>
+                            {% else %}
+                            <span class="px-2 py-1 bg-green-500/20 text-green-300 rounded text-xs font-medium">Low</span>
+                            {% endif %}
+                        </td>
+                        <td class="py-3 px-4 text-sm text-gray-400">
+                            {{ scan.timestamp.strftime('%Y-%m-%d %H:%M') }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Alerts Section -->
+<div class="mt-8">
+    <div class="bg-gray-800 border border-gray-700 rounded-lg p-6">
+        <h2 class="text-lg font-semibold text-white mb-6">Active Alerts</h2>
+        
+        <div class="space-y-4">
+            {% for alert in alerts %}
+            <div class="border-l-4 {% if alert.severity == 'critical' %}border-red-500 bg-red-500/10{% elif alert.severity == 'high' %}border-orange-500 bg-orange-500/10{% else %}border-yellow-500 bg-yellow-500/10{% endif %} p-4 rounded">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <h3 class="font-medium text-white">{{ alert.title }}</h3>
+                        <p class="text-sm text-gray-400 mt-1">Source: {{ alert.source }}</p>
+                    </div>
+                    <span class="text-xs font-medium {% if alert.severity == 'critical' %}text-red-400{% elif alert.severity == 'high' %}text-orange-400{% else %}text-yellow-400{% endif %}">
+                        {{ alert.severity | upper }}
+                    </span>
+                </div>
+                <p class="text-xs text-gray-500 mt-2">{{ alert.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

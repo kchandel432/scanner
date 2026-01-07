@@ -1,0 +1,13 @@
+name: Security Scanning
+on: [push]
+jobs:
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - run: pip install bandit safety
+      - run: bandit -r backend/ -f json
+      - run: safety check --json

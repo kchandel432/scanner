@@ -1,0 +1,2 @@
+models:
+  malware_detector: ml_models/malware_detector

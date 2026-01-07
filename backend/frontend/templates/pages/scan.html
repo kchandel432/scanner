@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block page_title %}Scanner{% endblock %}
+{% block page_subtitle %}Scan files and websites for threats{% endblock %}
+
+{% block content %}
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- Scan Form -->
+    <div class="lg:col-span-2">
+        <div class="bg-gray-800 border border-gray-700 rounded-lg p-6">
+            <h2 class="text-xl font-semibold text-white mb-6">Start a New Scan</h2>
+
+            <div class="space-y-6">
+                <!-- Scan Type Selection -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-3">Scan Type</label>
+                    <div class="grid grid-cols-3 gap-4">
+                        <label class="relative flex cursor-pointer">
+                            <input type="radio" name="scan_type" value="website" class="sr-only" checked>
+                            <div class="w-full p-4 border-2 border-gray-700 rounded-lg hover:border-blue-500 transition-colors has-[:checked]:border-blue-500 has-[:checked]:bg-blue-500/10">
+                                <svg class="w-6 h-6 text-blue-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 21l-8-4.5m0 0l-3.646-2.121a1 1 0 00-1.354 1 9 9 0 0018 0 1 1 0 00-1.354-1L12 21m0 0l8-4.5m-8 4.5v-9m8 9l3.646-2.121a1 1 0 001.354-1 9 9 0 00-18 0 1 1 0 001.354 1L20 12.5m-8-7.5a2 2 0 100-4 2 2 0 000 4z"></path>
+                                </svg>
+                                <p class="text-sm font-medium text-white">Website</p>
+                            </div>
+                        </label>
+
+                        <label class="relative flex cursor-pointer">
+                            <input type="radio" name="scan_type" value="file" class="sr-only">
+                            <div class="w-full p-4 border-2 border-gray-700 rounded-lg hover:border-green-500 transition-colors has-[:checked]:border-green-500 has-[:checked]:bg-green-500/10">
+                                <svg class="w-6 h-6 text-green-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                                </svg>
+                                <p class="text-sm font-medium text-white">File</p>
+                            </div>
+                        </label>
+
+                        <label class="relative flex cursor-pointer">
+                            <input type="radio" name="scan_type" value="portfolio" class="sr-only">
+                            <div class="w-full p-4 border-2 border-gray-700 rounded-lg hover:border-purple-500 transition-colors has-[:checked]:border-purple-500 has-[:checked]:bg-purple-500/10">
+                                <svg class="w-6 h-6 text-purple-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4"></path>
+                                </svg>
+                                <p class="text-sm font-medium text-white">Portfolio</p>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Website URL Input -->
+                <div id="website-input" class="block">
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Website URL</label>
+                    <div class="flex gap-3">
+                        <input type="url" id="website-url" placeholder="https://example.com" 
+                               class="flex-1 bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white placeholder-gray-500 focus:outline-none focus:border-blue-500">
+                        <button class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors">
+                            Scan
+                        </button>
+                    </div>
+                </div>
+
+                <!-- File Upload Input -->
+                <div id="file-input" class="hidden">
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Upload File</label>
+                    <div class="border-2 border-dashed border-gray-600 rounded-lg p-8 text-center hover:border-blue-500 transition-colors cursor-pointer"
+                         onclick="document.getElementById('file').click()">
+                        <svg class="w-8 h-8 text-gray-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                        </svg>
+                        <p class="text-gray-400 mb-1">Click to upload or drag and drop</p>
+                        <p class="text-xs text-gray-500">Max file size: 100MB</p>
+                        <input type="file" id="file" class="hidden">
+                    </div>
+                    <div id="file-preview" class="mt-4 space-y-2"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scan History -->
+    <div class="bg-gray-800 border border-gray-700 rounded-lg p-6">
+        <h2 class="text-lg font-semibold text-white mb-4">Recent Scans</h2>
+        <div class="space-y-3">
+            <div class="p-3 bg-gray-700/50 rounded-lg">
+                <p class="text-sm text-white">example.com</p>
+                <p class="text-xs text-gray-500">2 hours ago</p>
+            </div>
+            <div class="p-3 bg-gray-700/50 rounded-lg">
+                <p class="text-sm text-white">malware.exe</p>
+                <p class="text-xs text-gray-500">5 hours ago</p>
+            </div>
+            <div class="p-3 bg-gray-700/50 rounded-lg">
+                <p class="text-sm text-white">test.pdf</p>
+                <p class="text-xs text-gray-500">1 day ago</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.querySelectorAll('input[name="scan_type"]').forEach(input => {
+    input.addEventListener('change', function() {
+        document.getElementById('website-input').classList.toggle('hidden', this.value !== 'website');
+        document.getElementById('file-input').classList.toggle('hidden', this.value !== 'file');
+    });
+});
+</script>
+{% endblock %}

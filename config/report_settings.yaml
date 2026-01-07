@@ -1,0 +1,82 @@
+reports:
+  # Templates
+  templates_path: "backend/reports/templates"
+  default_language: "en"
+  supported_languages:
+    - "en"
+    - "es"
+    - "fr"
+    - "de"
+    - "hi"
+  
+  # Formats
+  default_format: "pdf"
+  supported_formats:
+    pdf:
+      engine: "weasyprint"
+      options:
+        dpi: 300
+        page_size: "A4"
+        margin: "0.75in"
+    html:
+      minify: true
+      include_css: true
+    json:
+      pretty_print: true
+      include_metadata: true
+    zip:
+      compression: "deflated"
+      compression_level: 6
+  
+  # Security
+  digital_signature:
+    enabled: true
+    algorithm: "RSA-SHA256"
+    certificate_path: "config/certificates/report_signing.pem"
+  watermark:
+    enabled: true
+    text: "BlackLotus Security Report - CONFIDENTIAL"
+    opacity: 0.1
+    rotation: -45
+  encryption:
+    enabled: false
+    algorithm: "AES-256-GCM"
+  
+  # Compliance templates
+  compliance_templates:
+    iso27001:
+      template: "iso27001.html.j2"
+      controls_file: "config/compliance/iso27001_controls.yaml"
+    soc2:
+      template: "soc2.html.j2"
+      controls_file: "config/compliance/soc2_controls.yaml"
+    gdpr:
+      template: "gdpr.html.j2"
+      controls_file: "config/compliance/gdpr_controls.yaml"
+    hipaa:
+      template: "hipaa.html.j2"
+      controls_file: "config/compliance/hipaa_controls.yaml"
+    pci_dss:
+      template: "pci_dss.html.j2"
+      controls_file: "config/compliance/pci_dss_controls.yaml"
+  
+  # Branding
+  branding:
+    logo_path: "config/branding/logo.png"
+    company_name: "BlackLotus AI Security"
+    website: "https://blacklotus.ai"
+    contact_email: "reports@blacklotus.ai"
+    support_phone: "+1-800-BLACKLOTUS"
+  
+  # Delivery
+  download:
+    max_file_size_mb: 100
+    token_expiry_hours: 24
+    rate_limit_per_hour: 10
+    allow_share: true
+    share_expiry_days: 7
+  
+  # Archival
+  retention_days: 365
+  archive_format: "zip"
+  auto_delete_expired: true
