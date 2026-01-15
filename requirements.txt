@@ -16,3 +16,4 @@ fastapi
 uvicorn
 python-multipart
 pydantic
+pydantic-settings>=2.0
