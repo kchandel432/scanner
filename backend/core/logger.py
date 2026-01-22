@@ -5,6 +5,10 @@ import logging
 import sys
 from typing import Optional
 
+# Default logger instance
+logger = logging.getLogger("cyber_risk_intel")
+
+
 def setup_logging(level: str = "INFO", log_file: Optional[str] = None) -> logging.Logger:
     """Setup application logging"""
 

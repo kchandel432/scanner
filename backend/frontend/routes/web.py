@@ -6,8 +6,9 @@ from fastapi.templating import Jinja2Templates
 from typing import Dict, Any
 import datetime
 
+from pathlib import Path
 router = APIRouter()
-templates = Jinja2Templates(directory="frontend/templates")
+templates = Jinja2Templates(directory=str(Path(__file__).parent.parent / "templates"))
 
 # Mock data for demo
 def get_mock_dashboard_data() -> Dict[str, Any]:

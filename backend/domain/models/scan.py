@@ -117,3 +117,22 @@ class RiskScore(BaseModel):
             return RiskLevel.LOW
         else:
             return RiskLevel.CLEAN
+
+
+class ScanResponse(BaseModel):
+    """Scan response model"""
+    filename: str
+    scan_id: str
+    results: Dict[str, Any]
+    timestamp: datetime
+
+
+class ScanHistoryItem(BaseModel):
+    """Individual scan history item"""
+    scan_id: str
+    scan_type: ScanType
+    target: str
+    status: ScanStatus
+    risk_level: RiskLevel
+    created_at: datetime
+    completed_at: Optional[datetime] = None

@@ -5,13 +5,26 @@ from typing import AsyncGenerator
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.orm import declarative_base
 from sqlalchemy.pool import NullPool
+from urllib.parse import urlparse
 
 from backend.core.settings import settings
 from backend.core.logger import logger
 
+
+def _convert_to_async_url(url: str) -> str:
+    """Convert sync DB URL to async URL"""
+    if url.startswith("sqlite://"):
+        # Replace sqlite:// with sqlite+aiosqlite://
+        return url.replace("sqlite://", "sqlite+aiosqlite://", 1)
+    return url
+
+
+# Convert to async URL
+ASYNC_DATABASE_URL = _convert_to_async_url(settings.DATABASE_URL)
+
 # Create async engine
 engine = create_async_engine(
-    settings.DATABASE_URL,
+    ASYNC_DATABASE_URL,
     echo=settings.DEBUG,
     future=True,
     pool_pre_ping=True,

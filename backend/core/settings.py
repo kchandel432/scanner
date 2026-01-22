@@ -2,7 +2,7 @@
 Application settings using Pydantic v2
 """
 
-from typing import List, Optional
+from typing import List, Optional, Union
 from pathlib import Path
 from pydantic_settings import BaseSettings
 from pydantic import Field, field_validator, ConfigDict
@@ -17,7 +17,7 @@ class Settings(BaseSettings):
     # ======================
     APP_NAME: str = "Cyber Risk Intelligence"
     APP_VERSION: str = "1.0.0"
-    DEBUG: bool = Field(default=True)
+    DEBUG: Union[bool, str] = Field(default=True)
     HOST: str = Field(default="0.0.0.0")
     PORT: int = Field(default=8000)
 
@@ -37,6 +37,9 @@ class Settings(BaseSettings):
         default_factory=lambda: [
             "http://localhost:8000",
             "http://127.0.0.1:8000",
+            "http://localhost:8501",
+            "http://127.0.0.1:8501",
+            "*",  # Allow all origins for development
         ]
     )
 
@@ -44,7 +47,7 @@ class Settings(BaseSettings):
     # Database
     # ======================
     DATABASE_URL: str = Field(
-        default="postgresql://user:password@localhost/cyber_risk"
+        default="sqlite:///./instance/blacklotus.db"
     )
 
     # ======================
@@ -102,6 +105,16 @@ class Settings(BaseSettings):
     def create_directories(cls, v: Path):
         v.mkdir(parents=True, exist_ok=True)
         return v
+
+    @field_validator("DEBUG", mode="before")
+    @classmethod
+    def parse_debug(cls, v):
+        """Convert DEBUG value to boolean."""
+        if isinstance(v, bool):
+            return v
+        if isinstance(v, str):
+            return v.lower() in ("true", "1", "yes", "on")
+        return bool(v)
 
 
 # Global settings instance

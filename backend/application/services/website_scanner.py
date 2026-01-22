@@ -1,6 +1,8 @@
 import aiohttp
 import asyncio
 import ssl
+import socket
+import re
 from urllib.parse import urlparse
 import whois
 import dns.resolver

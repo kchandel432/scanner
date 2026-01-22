@@ -1,9 +1,11 @@
 """
 Application lifespan management
 """
+
 import asyncio
-from typing import AsyncGenerator, Callable, List
 from contextlib import asynccontextmanager
+from typing import AsyncGenerator, Callable, List
+
 
 class LifespanManager:
     """Manages application startup and shutdown tasks"""
@@ -30,6 +32,7 @@ class LifespanManager:
                     task()
             except Exception as e:
                 print(f"Startup task failed: {e}")
+                # Continue with other tasks even if one fails
 
     async def shutdown(self):
         """Execute all shutdown tasks"""
@@ -42,6 +45,6 @@ class LifespanManager:
             except Exception as e:
                 print(f"Shutdown task failed: {e}")
 
+
 # Global lifespan manager instance
 lifespan = LifespanManager()
-
