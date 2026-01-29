@@ -17,7 +17,8 @@ from backend.app.lifespan import lifespan
 from backend.app.middleware import SecurityMiddleware
 from backend.core.logger import setup_logging
 from backend.core.settings import settings
-#from backend.infrastructure.cache.redis_client import redis_client
+
+# from backend.infrastructure.cache.redis_client import redis_client
 from backend.infrastructure.database.connection import close_db, init_db
 
 # Setup logging
@@ -75,7 +76,7 @@ try:
     from backend.frontend.routes.htmx_routes import htmx_router
     from backend.frontend.routes.web import web_router
     from backend.frontend.routes.websocket_routes import router as ws_router
-    
+
     app.include_router(web_router)
     app.include_router(htmx_router)
     app.include_router(ws_router)
